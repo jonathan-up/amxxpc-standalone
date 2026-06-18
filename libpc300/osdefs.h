@@ -37,12 +37,10 @@
 
 #if defined __FreeBSD__
    #include <sys/endian.h>
+#elif defined __APPLE__
+   #include <machine/endian.h>
 #elif defined LINUX
    #include <endian.h>
-#endif
-
-#if defined __APPLE__
-  #include <sys/types.h>
 #endif
 
 /* Linux NOW has these */
