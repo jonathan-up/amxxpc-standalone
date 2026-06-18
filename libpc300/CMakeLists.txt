@@ -20,6 +20,17 @@ if(UNIX)
   list(APPEND LIBPC300_SOURCES prefix.c)
 endif()
 
+if(CMAKE_C_COMPILER_ID MATCHES "GNU|Clang")
+  set_source_files_properties(sc1.c PROPERTIES COMPILE_OPTIONS
+    "-Wno-maybe-uninitialized;-Wno-stringop-truncation;-Wno-overflow")
+  set_source_files_properties(sc2.c PROPERTIES COMPILE_OPTIONS
+    "-Wno-strict-aliasing")
+  set_source_files_properties(sc3.c PROPERTIES COMPILE_OPTIONS
+    "-Wno-maybe-uninitialized")
+  set_source_files_properties(sc7.c PROPERTIES COMPILE_OPTIONS
+    "-Wno-int-to-pointer-cast")
+endif()
+
 set(LIBPC300_DEFINES
   NO_MAIN
   PAWNC_DLL
