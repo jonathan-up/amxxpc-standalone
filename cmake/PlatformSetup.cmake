@@ -1,0 +1,47 @@
+include(CheckIncludeFile)
+
+check_include_file("unistd.h" HAVE_UNISTD_H)
+check_include_file("inttypes.h" HAVE_INTTYPES_H)
+check_include_file("stdint.h" HAVE_STDINT_H)
+check_include_file("alloca.h" HAVE_ALLOCA_H)
+
+set(AMXXPC_PLATFORM_DEFINES "")
+set(AMXXPC_PLATFORM_LIBS "")
+
+if(HAVE_UNISTD_H)
+  list(APPEND AMXXPC_PLATFORM_DEFINES HAVE_UNISTD_H)
+endif()
+if(HAVE_INTTYPES_H)
+  list(APPEND AMXXPC_PLATFORM_DEFINES HAVE_INTTYPES_H)
+endif()
+if(HAVE_STDINT_H)
+  list(APPEND AMXXPC_PLATFORM_DEFINES HAVE_STDINT_H)
+endif()
+if(HAVE_ALLOCA_H)
+  list(APPEND AMXXPC_PLATFORM_DEFINES HAVE_ALLOCA_H)
+endif()
+
+if(UNIX)
+  list(APPEND AMXXPC_PLATFORM_DEFINES LINUX ENABLE_BINRELOC _GNU_SOURCE)
+  list(APPEND AMXXPC_PLATFORM_LIBS m pthread)
+
+  if(NOT APPLE)
+    list(APPEND AMXXPC_PLATFORM_LIBS dl)
+  endif()
+
+  add_compile_options(-Wall -Wno-unused-result)
+
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    add_compile_options(-g)
+  endif()
+endif()
+
+if(WIN32)
+  list(APPEND AMXXPC_PLATFORM_DEFINES _CRT_SECURE_NO_WARNINGS)
+  if(MSVC)
+    add_compile_options(/W3)
+  endif()
+endif()
+
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 11)
