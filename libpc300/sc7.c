@@ -467,7 +467,7 @@ static char *replacesequence(const char *pattern,char symbols[MAX_OPT_VARS][MAX_
 
   /* allocate a buffer to replace the sequence in */
   if ((buffer=(char*)malloc(*repl_length))==NULL)
-    return (char*)error(103);
+    return (char*)(intptr_t)error(103);
 
   /* replace the pattern into this temporary buffer */
   char *ptr=buffer;

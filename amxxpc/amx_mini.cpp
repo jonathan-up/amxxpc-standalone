@@ -30,20 +30,17 @@ uint16_t * AMXAPI amx_Align16(uint16_t *v)
 
 int AMXAPI amx_GetString(char *dest, const cell *source, int use_wchar, size_t size)
 {
-  int len = 0;
   if ((ucell)*source > UNPACKEDMAX) {
     int i;
     for (i=sizeof(cell)-1; i>=0; i--) {
       char c = (char)((ucell)source[0] >> (i*8));
       if (c==0) break;
       if (size > 1) { *dest++ = c; size--; }
-      len++;
     }
   } else {
     while (*source != 0) {
       if (size > 1) { *dest++ = (char)*source; size--; }
       source++;
-      len++;
     }
   }
   *dest = '\0';

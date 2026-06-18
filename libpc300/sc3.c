@@ -1913,6 +1913,7 @@ static int nesting=0;
   locheap=decl_heap;
 
   nesting++;
+  (void)nesting;
   assert(nest_stkusage>=0);
   #if !defined NDEBUG
     if (nesting==1)

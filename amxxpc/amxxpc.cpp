@@ -15,6 +15,7 @@
 #include <io.h>
 #endif
 #include <stdlib.h>
+#include <string.h>
 #include <zlib.h>
 #include "amx.h"
 #include "amxdbg.h"
@@ -244,8 +245,13 @@ void ReadFileIntoPl(abl *pl, FILE *fp)
 	AMX_HEADER hdr;
 	AMX_DBG_HDR dbg;
 	fread(&hdr, sizeof(hdr), 1, fp);
-	amx_Align32((uint32_t *)&hdr.stp);
-	amx_Align32((uint32_t *)&hdr.size);
+	uint32_t tmp_stp, tmp_size;
+	memcpy(&tmp_stp, &hdr.stp, sizeof(tmp_stp));
+	memcpy(&tmp_size, &hdr.size, sizeof(tmp_size));
+	amx_Align32(&tmp_stp);
+	amx_Align32(&tmp_size);
+	memcpy(&hdr.stp, &tmp_stp, sizeof(hdr.stp));
+	memcpy(&hdr.size, &tmp_size, sizeof(hdr.size));
 	pl->stp = hdr.stp;
 	int size = hdr.size;
 	if (hdr.flags & AMX_FLAG_DEBUG)
