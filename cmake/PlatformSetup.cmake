@@ -32,7 +32,29 @@ if(UNIX)
     list(APPEND AMXXPC_PLATFORM_LIBS dl)
   endif()
 
-  add_compile_options(-Wall -Wno-unused-result)
+  include(CheckCCompilerFlag)
+
+  set(_AMXXPC_C_WARNING_FLAGS
+    -Wall
+    -Wno-unused-result
+    -Wno-constant-conversion
+    -Wno-int-to-pointer-cast
+    -Wno-unused-but-set-variable
+    -Wno-address-of-packed-member
+    -Wno-overflow
+    -Wno-parentheses
+    -Wno-maybe-uninitialized
+    -Wno-stringop-truncation
+    -Wno-strict-aliasing
+  )
+
+  foreach(_flag IN LISTS _AMXXPC_C_WARNING_FLAGS)
+    string(MAKE_C_IDENTIFIER "HAVE${_flag}" _var)
+    check_c_compiler_flag(${_flag} ${_var})
+    if(${_var})
+      add_compile_options(${_flag})
+    endif()
+  endforeach()
 
   if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_compile_options(-g)
